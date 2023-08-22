@@ -2,20 +2,35 @@ import java.util.Scanner;
 
 public class Bank_App {
     private static final Scanner scanner = new Scanner(System.in);
-    public static void main(String[] args) {
-
-        final String clear = "\033[H\033[2J";
-        final String COLOR_BLUE_BOLD = "\033[1;34m";
-        final String COLOR_YELLOW_BOLD = "\033[1;33m";
-        final String COLOR_RESER = "\033[0m";
-        final String COLOR_RED = "\033[31m";
+    public static final String clear = "\033[H\033[2J";
+    public static final String COLOR_BLUE_BOLD = "\033[1;34m";
+    public static final String COLOR_YELLOW_BOLD = "\033[1;33m";
+    public static final String COLOR_RESER = "\033[0m";
+    public static final String COLOR_RED = "\033[31m";
         // double[] account = new double[0];
         // String[] customId = new String[0];
         // String[] name = new String[0];
-        String id = "";
-        String deposists ="";
+    public static boolean valid = true;
+    public static String id = "";
+    public static String deposists ="";
+    public static String[][] customers = new String[0][];
 
-        String[][] customers = new String[0][];
+        
+
+    public static void main(String[] args) {
+
+        // final String clear = "\033[H\033[2J";
+        // final String COLOR_BLUE_BOLD = "\033[1;34m";
+        // final String COLOR_YELLOW_BOLD = "\033[1;33m";
+        // final String COLOR_RESER = "\033[0m";
+        // final String COLOR_RED = "\033[31m";
+        // // double[] account = new double[0];
+        // // String[] customId = new String[0];
+        // // String[] name = new String[0];
+        // String id = "";
+        // String deposists ="";
+
+        
        
 
         final String DASHBOARD = "Welcome Smart Banking App";
@@ -69,7 +84,7 @@ mainloop:
                         
                     // }
 
-                    boolean valid = true;
+                    
                     String accname;
                     double iniaccbal;
 
@@ -124,21 +139,6 @@ mainloop:
     
                     customers = newCustomers;
 
-                    // double[] newAcc = new double[account.length +1];
-                    // String[] newCustomers = new String[name.length + 1];
-                    // String[] newCustomID = new String[customId.length + 1];
-                    // for (int i = 0; i < name.length; i++) {
-                    //     id = String.format("SDB-%05d ",(i+1));
-                    //     newCustomers[i] = name[i];
-                    //     newCustomID[i]= customId[i];
-                    //     newAcc[i] = account[i];
-                    // }
-                    // newAcc[newAcc.length - 1] = iniaccbal;
-                    // newCustomID[newCustomID.length -1] = id;
-                    // newCustomers[newCustomers.length-1] = accname;
-                    // customId = newCustomID;
-                    // name = newCustomers;
-                    // account = newAcc;
 
                     System.out.printf("\033[1;32m%s\033[0m\033[32m your new accounthas been added successfully!.\nInitial amount is %s\n\033[0mDo you need to add another name [Y/n]? ",accname,deposists);
                     if(scanner.nextLine().strip().toUpperCase().equals("Y")) continue;
@@ -149,16 +149,47 @@ mainloop:
                 break;
 
                 case DEPOSIT:
+
+                    IdValidator(id);
                     
                     
-                    do {
+                        boolean index =true;
+
+                        do{
+                            
+                        
+                            System.out.printf("Enter Initial Deposit Amount: Rs.");
+                            iniaccbal = scanner.nextDouble();
+                            scanner.nextLine();
+                            if(!(iniaccbal>5000) ){
+                                System.out.printf("%sMinimum Deposit  is Rs.1500.00%s \n",COLOR_RED,COLOR_RESER);
+                                index = false;
+                                valid = false;
+                                continue;}
+                            else{
+                                index = true;
+                            }
+                            String str = String.valueOf(iniaccbal);
+
+                        }while(!index);
+
+                        System.out.println();
+
+                }
+
+        }while(true);
+        
+    }
+
+    public static String IdValidator(String id){
+        do {
                         valid = true;
-                        System.out.print("\tEnter Account NUmber: ");  // SDB-00234
+                        System.out.print("Enter Account Number: ");  // SDB-00234
                         id = scanner.nextLine().toUpperCase().strip();
                         if (id.isBlank()){
                             System.out.printf("%sAccoun number can't be blank%s \n",COLOR_RED,COLOR_RESER);
                             valid = false;
-                        }else if (!id.startsWith("SDB-") || id.length() == 9){
+                        }else if (!id.startsWith("SDB-") || !(id.length() == 9)){
                             System.out.printf("%sInvalid Account Number%s \n",COLOR_RED,COLOR_RESER);
                             valid = false;
                         }else{
@@ -179,34 +210,9 @@ mainloop:
                                 }
                             }
                         }
-                        boolean index =true;
-
-                        do{
-                            
-                        
-                            System.out.printf("Enter Initial Deposit Amount: Rs.");
-                            iniaccbal = scanner.nextDouble();
-                            scanner.nextLine();
-                            if(!(iniaccbal>5000) ){
-                                System.out.printf("%sShould be Deposit more than Rs.5000.00%s \n",COLOR_RED,COLOR_RESER);
-                                index = false;
-                                valid = false;
-                                continue;}
-                            else{
-                                index = true;
-                            }
-                            String str = String.valueOf(iniaccbal);
-
-                        }while(!index);
-                            
-   
-                        
-                    }while (!valid);
+                     }while (!valid);
 
 
-                }
-
-        }while(true);
-        
+        return id;
     }
 }
