@@ -29,6 +29,7 @@ public class Bank_App {
         final String WITHDRAW= "Withdraw Money";
         final String TRANSFER= "Transfer Money";
         String screen = DASHBOARD;
+        String mydeposists ="";
 
         
 
@@ -106,8 +107,8 @@ mainloop:
                     else{
                         index = true;
                     }
-                    
-                    deposists  = String.format("Rs.%,.2f", dipAmount);
+                    mydeposists =  String.format("Rs.%,.2f", dipAmount);
+                    deposists  = dipAmount+"";
                     
                     }while(!index);
                     String newid;
@@ -115,12 +116,12 @@ mainloop:
                     String[][] newCustomers = new String[customers.length +1][3];
 
                     for (int i = 0; i < customers.length; i++) {
-                        id = String.format("SDB-%05d ",(i+1));
+                        id = String.format("SDB-%05d",(i+1));
                         customers[i][0] = id;
                         newCustomers[i] = customers[i];
                         }
 
-                    newid = String.format("SDB-%05d ",(customers.length+1));
+                    newid = String.format("SDB-%05d",(customers.length+1));
                       
                     newCustomers[newCustomers.length-1][0] = newid;
                     newCustomers[newCustomers.length-1][1] = accname;
@@ -128,9 +129,10 @@ mainloop:
     
                     customers = newCustomers;
                     
+                    
 
 
-                    System.out.printf("\033[1;32m%s\033[0m\033[32m your new accounthas been added successfully!.\nInitial amount is %s\n\033[0mDo you need to add another name [Y/n]? ",accname,deposists);
+                    System.out.printf("\033[1;32m%s\033[0m\033[32m your new accounthas been added successfully!.\nInitial amount is %s\n\033[0mDo you need to add another name [Y/n]? ",accname,mydeposists);
                     if(scanner.nextLine().strip().toUpperCase().equals("Y")) continue;
                     screen = DASHBOARD;
                     break;
@@ -143,12 +145,18 @@ mainloop:
 
                     String DepoAccId = IdValidator(id);
                     String str;
-                    
+                   
 
                     for (int i = 0; i < customers.length; i++) {
-                        if(customers[i][0].equals(DepoAccId))
+                        String newAccID = customers[i][0];
+                        System.out.println(newAccID);
+                         
+                        
+                        if(newAccID.equals(DepoAccId))
                         {
-                        System.out.printf("Your Account name: %s\n Initial Deposit: %s\n",customers[i][1],customers[i][2]);
+                           
+
+                        //System.out.printf("Your Account name: %s\n Initial Deposit: %s\n",customers[i][1],customers[i][2]);
                         boolean index =true;
                         
                         do{
@@ -171,12 +179,12 @@ mainloop:
 
                         double newAccointbalance = dipAmount + Double.valueOf(customers[i][2].substring(3));
                         System.out.println(newAccointbalance);
-                        customers[i][2] = String.format("Rs.%,.2f", newAccointbalance);
+                        //customers[i][2] = String.format("Rs.%,.2f", newAccointbalance);
 
                     }
 
                     }
-                   
+
                     break;
 
                 case CHECK_ACC_BALANCE:
@@ -220,14 +228,16 @@ mainloop:
                             }
                             for (int i = 0; i < customers.length; i++) {
                                 if (customers[i][0].equals(id)){
-                                    System.out.printf("\tAccount name: % \n", customers[i][1]);
-                                    System.out.printf("\tCurrent Balance: % \n",customers[i][2]);
+                                    System.out.printf("\tAccount name: %s \n", customers[i][1]);
+                                    double amount = Double.valueOf(customers[i][2]);
+                                    String newdeposists  = String.format("Rs.%,.2f", amount);
+                                    System.out.printf("\tCurrent Balance: %s \n",newdeposists);
                                     valid = false;
                                     break;
                                 }
                             }
                         }
-                     }while (!valid);
+                     }while (valid);
 
 
         return id;
