@@ -1,3 +1,5 @@
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Bank_App {
@@ -15,23 +17,9 @@ public class Bank_App {
     public static String deposists ="";
     public static String[][] customers = new String[0][];
 
-        
 
     public static void main(String[] args) {
 
-        // final String clear = "\033[H\033[2J";
-        // final String COLOR_BLUE_BOLD = "\033[1;34m";
-        // final String COLOR_YELLOW_BOLD = "\033[1;33m";
-        // final String COLOR_RESER = "\033[0m";
-        // final String COLOR_RED = "\033[31m";
-        // // double[] account = new double[0];
-        // // String[] customId = new String[0];
-        // // String[] name = new String[0];
-        // String id = "";
-        // String deposists ="";
-
-        
-       
 
         final String DASHBOARD = "Welcome Smart Banking App";
         final String OPEN_NEW_ACC = "Open New Account";
@@ -41,6 +29,8 @@ public class Bank_App {
         final String WITHDRAW= "Withdraw Money";
         final String TRANSFER= "Transfer Money";
         String screen = DASHBOARD;
+
+        
 
 mainloop:
         do{
@@ -78,15 +68,10 @@ mainloop:
 
                 case OPEN_NEW_ACC :
                     System.out.printf("Account Number: SDB-%05d \n",(customers.length +1));
-                    // for (int i = 0; i < customId.length; i++) {
-                    //     String id = String.format("SDB-%05d ",(i+1));
-                        
-                        
-                    // }
+                 
 
-                    
                     String accname;
-                    double iniaccbal;
+                    double dipAmount;
 
                     do{
                         valid = true;
@@ -111,9 +96,9 @@ mainloop:
                     do{
                         
                     System.out.printf("Enter Initial Deposit Amount: Rs.");
-                    iniaccbal = scanner.nextDouble();
+                    dipAmount = scanner.nextDouble();
                     scanner.nextLine();
-                    if(!(iniaccbal>5000) ){
+                    if(!(dipAmount>5000) ){
                         System.out.printf("%sShould be Deposit more than Rs.5000.00%s \n",COLOR_RED,COLOR_RESER);
                         index = false;
                         valid = false;
@@ -122,22 +107,27 @@ mainloop:
                         index = true;
                     }
                     
-                    deposists  = String.format("Rs.%,.2f", iniaccbal);
+                    deposists  = String.format("Rs.%,.2f", dipAmount);
                     
                     }while(!index);
+                    String newid;
 
                     String[][] newCustomers = new String[customers.length +1][3];
+
                     for (int i = 0; i < customers.length; i++) {
                         id = String.format("SDB-%05d ",(i+1));
                         customers[i][0] = id;
                         newCustomers[i] = customers[i];
                         }
 
-                    newCustomers[newCustomers.length-1][0] = id;
+                    newid = String.format("SDB-%05d ",(customers.length+1));
+                      
+                    newCustomers[newCustomers.length-1][0] = newid;
                     newCustomers[newCustomers.length-1][1] = accname;
                     newCustomers[newCustomers.length-1][2] = deposists;
     
                     customers = newCustomers;
+                    
 
 
                     System.out.printf("\033[1;32m%s\033[0m\033[32m your new accounthas been added successfully!.\nInitial amount is %s\n\033[0mDo you need to add another name [Y/n]? ",accname,deposists);
@@ -146,22 +136,27 @@ mainloop:
                     break;
 
                 }while(!valid);
+                
                 break;
 
                 case DEPOSIT:
 
-                    IdValidator(id);
+                    String DepoAccId = IdValidator(id);
+                    String str;
                     
-                    
-                        boolean index =true;
 
+                    for (int i = 0; i < customers.length; i++) {
+                        if(customers[i][0].equals(DepoAccId))
+                        {
+                        System.out.printf("Your Account name: %s\n Initial Deposit: %s\n",customers[i][1],customers[i][2]);
+                        boolean index =true;
+                        
                         do{
                             
-                        
-                            System.out.printf("Enter Initial Deposit Amount: Rs.");
-                            iniaccbal = scanner.nextDouble();
+                            System.out.printf("Enter Deposit Amount: Rs.");
+                            dipAmount = scanner.nextDouble();
                             scanner.nextLine();
-                            if(!(iniaccbal>5000) ){
+                            if(!(dipAmount>1500) ){
                                 System.out.printf("%sMinimum Deposit  is Rs.1500.00%s \n",COLOR_RED,COLOR_RESER);
                                 index = false;
                                 valid = false;
@@ -169,19 +164,41 @@ mainloop:
                             else{
                                 index = true;
                             }
-                            String str = String.valueOf(iniaccbal);
+                            str = String.valueOf(dipAmount);
+                            
 
                         }while(!index);
 
-                        System.out.println();
+                        double newAccointbalance = dipAmount + Double.valueOf(customers[i][2].substring(3));
+                        System.out.println(newAccointbalance);
+                        customers[i][2] = String.format("Rs.%,.2f", newAccointbalance);
 
-                }
+                    }
+
+                    }
+                   
+                    break;
+
+                case CHECK_ACC_BALANCE:
+                        
+                        String AccId = IdValidator(id);
+
+                        for (int j = 0; j < customers.length; j++) {
+                            if(AccId.equals(customers[j][0])){
+                                System.out.printf("Account Name: %s \n Your Account Balanace is: %s",customers[1],customers[2]);
+                                return;
+                            }
+                        }
+                    
+                    }   
 
         }while(true);
+      
         
     }
 
-    public static String IdValidator(String id){
+    public static String IdValidator(String id1){
+        String id;
         do {
                         valid = true;
                         System.out.print("Enter Account Number: ");  // SDB-00234
