@@ -210,40 +210,56 @@ public class Bank_App {
 
                 case WITHDRAW:
 
-                        String withId = IdValidator(id);
-                        for (int j = 0; j < args.length; j++) {
-                            if(withId.equals(customers[j][0])){
-                                double accBal = Double.valueOf(customers[j][2]) - 500.00;
-                                if(accBal > 500) {
-                                    
-                                    String withDeposit  = String.format("Rs.%,.2f", accBal);
-                                    System.out.printf("Your withdrawable balance is: %s\n",withDeposit);
+                boolean index4 = true;
+                do{
 
-                                    boolean index =true;
-                        
-                                do{
+                    String DepoAccId = IdValidator(id); 
+
+                    for (int i = 0; i < customers.length; i++) {
+                        String newAccID = customers[i][0];
+ 
+                        if(newAccID.equals(DepoAccId))
+                        {
+
+                        boolean index =true;  
+                        do{
                             
-                                    System.out.printf("Enter Withdrawable Amount: Rs.");
-                                    dipAmount = scanner.nextDouble();
-                                    scanner.nextLine();
-                                    if(!(dipAmount>500) ){
-                                        System.out.printf("%sMinimum withradrawable amount is Rs.500.00%s \n",COLOR_RED,COLOR_RESER);
-                                        index = false;
-                                        valid = false;
-                                        continue;}
-                                    else{
-                                        index = true;
-                                    }
-
-                                }while(!index);
-
-                                } else{
-                                    System.out.println("Minimum Withdrawable amount is Rs.500.00. Please Deposit");
-                                }
+                            System.out.printf("Enter Withdraw Amount: Rs.");
+                            dipAmount = scanner.nextDouble();
+                            scanner.nextLine();
+                            if(!(dipAmount>100.00) ){
+                                System.out.printf("%sMinimum withdrawable amount  is Rs.100.00%s \n",COLOR_RED,COLOR_RESER);
+                                index = false;
+                                valid = false;
+                                continue;}
+                            else{
+                                index = true;
                             }
-                        } 
 
+                        }while(!index);
+
+                        double newAccointbalance = Double.valueOf(customers[i][2]) - dipAmount;
+                        if(newAccointbalance > 500.00){
+                            customers[i][2] = newAccointbalance + "";
+                            System.out.println(String.format("Current Account Balance is Rs.%,.2f", newAccointbalance));
+                            index3 = false;}
+                        else{
+                            System.out.println(String.format("Current Account Balance is Rs.%,.2f", customers[i][2]));
+                            index3 = false;
+                            break;
+                        }
+
+                        }
+                    }
+
+                    System.out.println("Do you need to withdroaw [Y/n]? ");
+                    if(scanner.nextLine().strip().toUpperCase().equals("Y")) continue;
+                    screen = DASHBOARD;
                     break;
+
+                }while(index4);
+
+                break;
                 }
 
         }while(true);
