@@ -185,19 +185,39 @@ mainloop:
                     break;
 
                 case CHECK_ACC_BALANCE:
-                        
+
+                boolean index2 = true;
+
+                do{
+                        String newdeposists = "";
                         String AccId = IdValidator(id);
 
                         for (int j = 0; j < customers.length; j++) {
                             if(AccId.equals(customers[j][0])){
-                                System.out.printf("Account Name: %s \n Your Account Balanace is: %s",customers[1],customers[2]);
-                                return;
+                                double withdraAmount = Double.valueOf(customers[j][2]);
+
+                                double newAmount = withdraAmount - 500.00;
+                                if(newAmount>500.00){
+                                newdeposists  = String.format("Rs.%,.2f", newAmount);
+                                System.out.printf("\tYour withdrawable Balanace is: %s\n", newdeposists);
+                                index2 = true;
+                                continue;
+                                } else{ 
+                                    System.out.printf("\t%sYour withdrawable Balanace is less than Rs.500.00. Can't withdraw from this account%",COLOR_RED,COLOR_RESER );
+                                    index2 = false;
+                                    
+                                }
                             }
                         }
+                        System.out.println("Do you need to check another Account [Y/n]? ");
+                        if(scanner.nextLine().strip().toUpperCase().equals("Y")) continue;
+                        screen = DASHBOARD;
 
                         break;
+                }while(index2);
 
-                    
+                break;
+
                 case WITHDRAW:
 
                         String withId = IdValidator(id);
@@ -230,20 +250,14 @@ mainloop:
                                 } else{
                                     System.out.println("Minimum Withdrawable amount is Rs.500.00. Please Deposit");
                                 }
-                            
                             }
-                    
                         } 
-                        
-                        
 
-                        
-                        break;
+                    break;
                 }
 
         }while(true);
       
-        
     }
 
     public static String IdValidator(String id1){
