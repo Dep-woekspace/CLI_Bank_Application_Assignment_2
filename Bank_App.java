@@ -1,5 +1,3 @@
-import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Bank_App {
@@ -9,17 +7,12 @@ public class Bank_App {
     public static final String COLOR_YELLOW_BOLD = "\033[1;33m";
     public static final String COLOR_RESER = "\033[0m";
     public static final String COLOR_RED = "\033[31m";
-        // double[] account = new double[0];
-        // String[] customId = new String[0];
-        // String[] name = new String[0];
     public static boolean valid = true;
     public static String id = "";
     public static String deposists ="";
     public static String[][] customers = new String[0][];
 
-
     public static void main(String[] args) {
-
 
         final String DASHBOARD = "Welcome Smart Banking App";
         final String OPEN_NEW_ACC = "Open New Account";
@@ -31,9 +24,6 @@ public class Bank_App {
         String screen = DASHBOARD;
         String mydeposists ="";
 
-        
-
-mainloop:
         do{
             final String Apptitle = String.format(" %s%s%s \n", COLOR_BLUE_BOLD,screen,COLOR_RESER );
             System.out.println(clear);
@@ -139,29 +129,24 @@ mainloop:
                 break;
 
                 case DEPOSIT:
+                    boolean index3 = true;
+                do{
 
-                    String DepoAccId = IdValidator(id);
-                    String str;
-                   
+                    String DepoAccId = IdValidator(id); 
 
                     for (int i = 0; i < customers.length; i++) {
                         String newAccID = customers[i][0];
-                        System.out.println(newAccID);
-                         
-                        
+ 
                         if(newAccID.equals(DepoAccId))
                         {
-                           
-
                         //System.out.printf("Your Account name: %s\n Initial Deposit: %s\n",customers[i][1],customers[i][2]);
-                        boolean index =true;
-                        
+                        boolean index =true;  
                         do{
                             
                             System.out.printf("Enter Deposit Amount: Rs.");
                             dipAmount = scanner.nextDouble();
                             scanner.nextLine();
-                            if(!(dipAmount>1500) ){
+                            if(!(dipAmount>1500.00) ){
                                 System.out.printf("%sMinimum Deposit  is Rs.1500.00%s \n",COLOR_RED,COLOR_RESER);
                                 index = false;
                                 valid = false;
@@ -169,20 +154,25 @@ mainloop:
                             else{
                                 index = true;
                             }
-                            str = String.valueOf(dipAmount);
-                            
 
                         }while(!index);
 
-                        double newAccointbalance = dipAmount + Double.valueOf(customers[i][2].substring(3));
-                        System.out.println(newAccointbalance);
-                        //customers[i][2] = String.format("Rs.%,.2f", newAccointbalance);
+                        double newAccointbalance = dipAmount + Double.valueOf(customers[i][2]);
+                        customers[i][2] = newAccointbalance + "";
+                        System.out.println(String.format("Rs.%,.2f", newAccointbalance));
+                        index3 = false;
 
+                        }
                     }
 
-                }
-
+                    System.out.println("Do you need to check another Account [Y/n]? ");
+                    if(scanner.nextLine().strip().toUpperCase().equals("Y")) continue;
+                    screen = DASHBOARD;
                     break;
+
+                }while(index3);
+
+                break;
 
                 case CHECK_ACC_BALANCE:
 
@@ -263,37 +253,36 @@ mainloop:
     public static String IdValidator(String id1){
         String id;
         do {
-                        valid = true;
-                        System.out.print("Enter Account Number: ");  // SDB-00234
-                        id = scanner.nextLine().toUpperCase().strip();
-                        if (id.isBlank()){
-                            System.out.printf("%sAccoun number can't be blank%s \n",COLOR_RED,COLOR_RESER);
-                            valid = false;
-                        }else if (!id.startsWith("SDB-") || !(id.length() == 9)){
-                            System.out.printf("%sInvalid Account Number%s \n",COLOR_RED,COLOR_RESER);
-                            valid = false;
-                        }else{
-                            String number = id.substring(4);
-                            for (int i = 0; i < number.length(); i++) {
-                                if (!Character.isDigit(number.charAt(i))){
-                                    System.out.printf("%sInvalid Account Number%s \n",COLOR_RED,COLOR_RESER);
-                                    valid = false;
-                                    break;
-                                }
-                            }
-                            for (int i = 0; i < customers.length; i++) {
-                                if (customers[i][0].equals(id)){
-                                    System.out.printf("\tAccount name: %s \n", customers[i][1]);
-                                    double amount = Double.valueOf(customers[i][2]);
-                                    String newdeposists  = String.format("Rs.%,.2f", amount);
-                                    System.out.printf("\tCurrent Balance: %s \n",newdeposists);
-                                    valid = false;
-                                    break;
-                                }
-                            }
-                        }
-                     }while (valid);
-
+            valid = true;
+            System.out.print("Enter Account Number: ");  // SDB-00234
+            id = scanner.nextLine().toUpperCase().strip();
+            if (id.isBlank()){
+                System.out.printf("%sAccoun number can't be blank%s \n",COLOR_RED,COLOR_RESER);
+                valid = false;
+            }else if (!id.startsWith("SDB-") || !(id.length() == 9)){
+                System.out.printf("%sInvalid Account Number%s \n",COLOR_RED,COLOR_RESER);
+                valid = false;
+            }else{
+                String number = id.substring(4);
+                for (int i = 0; i < number.length(); i++) {
+                    if (!Character.isDigit(number.charAt(i))){
+                        System.out.printf("%sInvalid Account Number%s \n",COLOR_RED,COLOR_RESER);
+                        valid = false;
+                        break;
+                    }
+                }
+                for (int i = 0; i < customers.length; i++) {
+                    if (customers[i][0].equals(id)){
+                        System.out.printf("\tAccount name: %s \n", customers[i][1]);
+                        double amount = Double.valueOf(customers[i][2]);
+                        String newdeposists  = String.format("Rs.%,.2f", amount);
+                        System.out.printf("\tCurrent Balance: %s \n",newdeposists);
+                        valid = false;
+                        break;
+                    }
+                }
+            }
+        }while (valid);
 
         return id;
     }
