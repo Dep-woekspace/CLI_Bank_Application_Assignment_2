@@ -128,9 +128,6 @@ mainloop:
                     newCustomers[newCustomers.length-1][2] = deposists;
     
                     customers = newCustomers;
-                    
-                    
-
 
                     System.out.printf("\033[1;32m%s\033[0m\033[32m your new accounthas been added successfully!.\nInitial amount is %s\n\033[0mDo you need to add another name [Y/n]? ",accname,mydeposists);
                     if(scanner.nextLine().strip().toUpperCase().equals("Y")) continue;
@@ -183,7 +180,7 @@ mainloop:
 
                     }
 
-                    }
+                }
 
                     break;
 
@@ -197,8 +194,52 @@ mainloop:
                                 return;
                             }
                         }
+
+                        break;
+
                     
-                    }   
+                case WITHDRAW:
+
+                        String withId = IdValidator(id);
+                        for (int j = 0; j < args.length; j++) {
+                            if(withId.equals(customers[j][0])){
+                                double accBal = Double.valueOf(customers[j][2]) - 500.00;
+                                if(accBal > 500) {
+                                    
+                                    String withDeposit  = String.format("Rs.%,.2f", accBal);
+                                    System.out.printf("Your withdrawable balance is: %s\n",withDeposit);
+
+                                    boolean index =true;
+                        
+                                do{
+                            
+                                    System.out.printf("Enter Withdrawable Amount: Rs.");
+                                    dipAmount = scanner.nextDouble();
+                                    scanner.nextLine();
+                                    if(!(dipAmount>500) ){
+                                        System.out.printf("%sMinimum withradrawable amount is Rs.500.00%s \n",COLOR_RED,COLOR_RESER);
+                                        index = false;
+                                        valid = false;
+                                        continue;}
+                                    else{
+                                        index = true;
+                                    }
+
+                                }while(!index);
+
+                                } else{
+                                    System.out.println("Minimum Withdrawable amount is Rs.500.00. Please Deposit");
+                                }
+                            
+                            }
+                    
+                        } 
+                        
+                        
+
+                        
+                        break;
+                }
 
         }while(true);
       
