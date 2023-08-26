@@ -260,7 +260,39 @@ public class Bank_App {
                 }while(index4);
 
                 break;
+
+            case REMOVE_ACCOUNT:
+
+                boolean index5 = true;
+                int deleteIndex;
+
+                do{
+
+                    String delAccId = IdValidator(id); 
+
+                    for (int i = 0; i < customers.length; i++) {
+                        String newAccID = customers[i][0];
+ 
+                        if(newAccID.equals(delAccId))
+                        {
+                            deleteIndex = i;
+                        }else{
+                            System.out.printf("%sAccoun number not in the System%s \n",COLOR_RED,COLOR_RESER);
+                        }
+
+                    
+
+                    
                 }
+                System.out.println("Do you want to Delete another acoount[Y/n]? ");
+                    if(scanner.nextLine().strip().toUpperCase().equals("Y")) continue;
+                    screen = DASHBOARD;
+                    break;
+
+            }while(index5);
+                break;
+            
+                
 
         }while(true);
       
