@@ -199,6 +199,7 @@ public class Bank_App {
                                 }
                             }
                         }
+                        
                         System.out.println("Do you need to check another Account [Y/n]? ");
                         if(scanner.nextLine().strip().toUpperCase().equals("Y")) continue;
                         screen = DASHBOARD;
@@ -241,10 +242,10 @@ public class Bank_App {
                         double newAccointbalance = Double.valueOf(customers[i][2]) - dipAmount;
                         if(newAccointbalance > 500.00){
                             customers[i][2] = newAccointbalance + "";
-                            System.out.println(String.format("Current Account Balance is Rs.%,.2f", newAccointbalance));
+                            System.out.println(String.format("Current Account Balance is Rs.%,.2f\n", newAccointbalance));
                             index3 = false;}
                         else{
-                            System.out.println(String.format("Current Account Balance is Rs.%,.2f", customers[i][2]));
+                            System.out.println(String.format("Account Balanse shold have more than Rs.500.00\n", customers[i][2]));
                             index3 = false;
                             break;
                         }
@@ -252,7 +253,7 @@ public class Bank_App {
                         }
                     }
 
-                    System.out.println("Do you need to withdroaw [Y/n]? ");
+                    System.out.println("Do you need to withdroaw again [Y/n]? ");
                     if(scanner.nextLine().strip().toUpperCase().equals("Y")) continue;
                     screen = DASHBOARD;
                     break;
@@ -264,7 +265,7 @@ public class Bank_App {
             case REMOVE_ACCOUNT:
 
                 boolean index5 = true;
-                int deleteIndex;
+                int deleteIndex = 0;
 
                 do{
 
@@ -276,24 +277,38 @@ public class Bank_App {
                         if(newAccID.equals(delAccId))
                         {
                             deleteIndex = i;
+                            break;
                         }else{
                             System.out.printf("%sAccoun number not in the System%s \n",COLOR_RED,COLOR_RESER);
+                            index5 = false;
+                            break;
+                            }
+                    
                         }
+                    String[][] newCustomers = new String[customers.length +1][3];
 
-                    
+                    for (int i = 0; i < customers.length-2; i++) {
+                        if(i == deleteIndex){
+                            continue;
+                        }else{
+                            newCustomers[i][0] = customers[i][0];
+                            newCustomers[i][1] = customers[i][1];
+                            newCustomers[i][2] = customers[i][2];
 
-                    
-                }
-                System.out.println("Do you want to Delete another acoount[Y/n]? ");
+                        }
+                    }
+    
+                    customers = newCustomers;
+                    System.out.printf("%sMinimum Deposit  is Rs.1500.00%s \n",COLOR_YELLOW_BOLD,COLOR_RESER);
+                    System.out.println("Do you want to Delete another acoount[Y/n]? ");
                     if(scanner.nextLine().strip().toUpperCase().equals("Y")) continue;
                     screen = DASHBOARD;
                     break;
 
             }while(index5);
-                break;
             
+        }
                 
-
         }while(true);
       
     }
@@ -302,7 +317,7 @@ public class Bank_App {
         String id;
         do {
             valid = true;
-            System.out.print("Enter Account Number: ");  // SDB-00234
+            System.out.print("Enter Account Number: "); 
             id = scanner.nextLine().toUpperCase().strip();
             if (id.isBlank()){
                 System.out.printf("%sAccoun number can't be blank%s \n",COLOR_RED,COLOR_RESER);
@@ -324,9 +339,16 @@ public class Bank_App {
                         System.out.printf("\tAccount name: %s \n", customers[i][1]);
                         double amount = Double.valueOf(customers[i][2]);
                         String newdeposists  = String.format("Rs.%,.2f", amount);
-                        System.out.printf("\tCurrent Balance: %s \n",newdeposists);
+                        System.out.printf("\tCurrent Balance: %s \n", newdeposists);
                         valid = false;
                         break;
+
+                    }else{
+                         System.out.printf("%sThis account has Deleted%s \n",COLOR_RED,COLOR_RESER);
+                         valid = false;
+                    
+                    break;
+
                     }
                 }
             }
